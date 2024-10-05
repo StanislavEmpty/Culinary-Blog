@@ -1,0 +1,11 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center; /* По желанию, центрирует содержимое по вертикали */
+    justify-content: center; /* По желанию, центрирует содержимое по горизонтали */
+}
