@@ -1,5 +1,7 @@
 package hw.culinaryblog.Models.User;
 
+import hw.culinaryblog.Models.Comment.Comment;
+import hw.culinaryblog.Models.Post.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +17,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @Column(name = "id")
@@ -36,6 +37,24 @@ public class User implements UserDetails {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Post> posts;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Comment> comments;
+
+    @Column(name = "is_account_non_expired")
+    private Boolean isAccountNonExpired = true;
+
+    @Column(name = "is_account_non_locked")
+    private Boolean isAccountNonLocked = true;
+
+    @Column(name = "is_credentials_non_expired")
+    private Boolean isCredentialsNonExpired = true;
+
+    @Column(name = "is_enabled")
+    private Boolean isEnabled = true;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -43,21 +62,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return isAccountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isCredentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

@@ -27,8 +27,20 @@ public class AuthenticationService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
+                .isAccountNonLocked(true)
+                .isAccountNonExpired(true)
+                .isCredentialsNonExpired(true)
+                .isEnabled(true)
                 .build();
+
+        if(userService.isUsersEmpty())
+        {
+            user.setRole(Role.ROLE_ADMIN);
+        }
+        else
+        {
+            user.setRole(Role.ROLE_USER);
+        }
 
         userService.create(user);
 

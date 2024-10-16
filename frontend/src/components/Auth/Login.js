@@ -62,6 +62,11 @@ const Login = () => {
 							placeholder='Enter your password'
 						/>
 					</div>
+					<div className={styles.signUpContainer}>
+						<a href="/sign-up" className={styles.signUpLink}>
+							Sign up?
+						</a>
+					</div>
 					<button type='submit' className={styles.loginButton}>
 						Sign in
 					</button>

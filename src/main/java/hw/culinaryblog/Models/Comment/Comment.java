@@ -1,13 +1,15 @@
 package hw.culinaryblog.Models.Comment;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import hw.culinaryblog.Models.User.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +20,11 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String author;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "author_id")
+    @JsonIgnore
+    private User author;
     private String content;
-    private String date;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date date;
 }

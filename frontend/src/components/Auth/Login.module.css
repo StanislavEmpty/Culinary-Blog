@@ -88,17 +88,17 @@
   }
 }
 
-.forgotPasswordContainer {
+.signUpContainer {
   margin-bottom: 15px;
   text-align: center;
 }
 
-.forgotPasswordLink {
+.signUpLink {
   color: #007bff;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 18px;
 }
 
-.forgotPasswordLink:hover {
+.signUpLink:hover {
   text-decoration: underline;
 }

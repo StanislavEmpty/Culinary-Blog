@@ -73,6 +73,23 @@ public class UserService {
         return getByUsername(username);
     }
 
+    /**
+     * Проверка существуют ли пользователи в базе
+     *
+     * @return Истина, если существуют, иначе ложь
+     */
+    public boolean isUsersEmpty() {
+        return repository.count() == 0;
+    }
+
+    /**
+     * Получить пользователя по ID
+     *
+     * @return пользователь
+     */
+    public User getUserById(Long id) {
+        return repository.getReferenceById(id);
+    }
 
     /**
      * Выдача прав администратора текущему пользователю

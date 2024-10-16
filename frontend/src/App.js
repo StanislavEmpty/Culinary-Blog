@@ -7,6 +7,7 @@ import HomePage from "./components/HomePage";
 import NotExistPage from "./components/NotExistPage";
 import RecipeBlogPage from "./components/RecipeBlogPage";
 import Login from "./components/Auth/Login";
+import RegistrationForm from "./components/Auth/RegistrationForm";
 
 function App() {
     const [username, setUsername] = React.useState(localStorage.getItem('username'));
@@ -19,13 +20,14 @@ function App() {
         localStorage.removeItem('username');
         localStorage.removeItem('role');
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/sign-in');
     }
   return (
     <div className="App">
         <Routes>
             <Route element={<ProtectedRoute isAllowed={!username} redirectPath={"/"}/>}>
-                <Route path="login" element={<Login/>}/>
+                <Route path="sign-in" element={<Login/>}/>
+                <Route path="sign-up" element={<RegistrationForm/>}/>
             </Route>
             <Route element={
                 <Layout username={username} userRole={userRole} logoutHandler={logoutHandler}>

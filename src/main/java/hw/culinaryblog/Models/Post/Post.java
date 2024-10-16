@@ -1,7 +1,9 @@
 package hw.culinaryblog.Models.Post;
 
-import hw.culinaryblog.Models.Blog.Blog;
+import hw.culinaryblog.Models.Comment.Comment;
 import hw.culinaryblog.Models.Ingredient.Ingredient;
+import hw.culinaryblog.Models.Stage.Stage;
+import hw.culinaryblog.Models.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,12 +22,23 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    private String content;
-    private String author;
+
+    private String imageUrl;
+
+    private int durationCookingMinutes;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
+
     private Long likes = 0L;
     private Long dislikes= 0L;
-    @ManyToOne
-    private Blog parentBlog;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Stage> stages;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Comment> comments;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "posts_ingredients",

@@ -13,7 +13,6 @@ const HomePage = () => {
             try
             {
                 const resp = await apiService.get('/api/posts');
-                console.log(resp.data);
                 setPosts(resp.data);
                 setLoading(false);
             }
