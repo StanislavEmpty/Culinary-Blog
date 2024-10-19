@@ -3,12 +3,12 @@ package hw.culinaryblog.Controllers;
 import hw.culinaryblog.Models.Blog.Blog;
 import hw.culinaryblog.Models.Blog.BlogCreateDTO;
 import hw.culinaryblog.Models.Blog.BlogUpdateDTO;
-import hw.culinaryblog.Repo.BlogRepository;
+import hw.culinaryblog.Services.BlogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +22,14 @@ import java.net.URISyntaxException;
 @RequiredArgsConstructor
 public class BlogController {
 
-    private final BlogRepository blogRepository;
+    private final BlogService blogService;
 
     @Operation(
             summary = "Получение всех блогов"
     )
     @GetMapping
     public Iterable<Blog> getBlogs() {
-        return blogRepository.findAll();
+        return blogService.findAll();
     }
 
     @Operation(
@@ -37,7 +37,7 @@ public class BlogController {
     )
     @GetMapping("/{id}")
     public Blog getBlog(@PathVariable Long id) {
-        return blogRepository.findById(id).orElseThrow(RuntimeException::new);
+        return blogService.findById(id);
     }
 
     @Operation(
@@ -45,7 +45,7 @@ public class BlogController {
     )
     @PostMapping
     public ResponseEntity<Blog> createBlog(@RequestBody BlogCreateDTO dto) throws URISyntaxException {
-        Blog savedBlog = blogRepository.save(dto.convertToBlog());
+        Blog savedBlog = blogService.save(dto.convertToBlog());
         return ResponseEntity.created(new URI("/api/blogs/" + savedBlog.getId())).body(savedBlog);
     }
 
@@ -54,22 +54,43 @@ public class BlogController {
     )
     @PutMapping("/{id}")
     public ResponseEntity<Blog> updateBlog(@PathVariable Long id, @RequestBody BlogUpdateDTO dto) {
-        if (blogRepository.existsById(id)) {
-            Blog currentBlog = blogRepository.findById(id).orElseThrow(RuntimeException::new);
+        if (blogService.existsById(id)) {
+            Blog currentBlog = blogService.findById(id);
             currentBlog.setTitle(dto.getTitle());
             currentBlog.setPosts(dto.getPosts());
-            blogRepository.save(currentBlog);
+            blogService.save(currentBlog);
             return ResponseEntity.ok(currentBlog);
         }
         return ResponseEntity.notFound().build();
     }
 
     @Operation(
+            summary = "Бан блога"
+    )
+    @PostMapping("/ban/{id}")
+    public HttpStatus banBlog(@PathVariable Long id) {
+        if(blogService.banById(id))
+            return HttpStatus.OK;
+        return HttpStatus.NOT_FOUND;
+    }
+
+    @Operation(
+            summary = "Анбан блога"
+    )
+    @PostMapping("/unban/{id}")
+    public HttpStatus unbanBlog(@PathVariable Long id) {
+        if(blogService.unbanById(id))
+            return HttpStatus.OK;
+        return HttpStatus.NOT_FOUND;
+    }
+
+    @Operation(
             summary = "Удаление блога"
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Blog> deleteBlog(@PathVariable Long id) {
-        blogRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+    public HttpStatus deleteBlog(@PathVariable Long id) {
+        if(blogService.deleteById(id))
+            return HttpStatus.OK;
+        return HttpStatus.NOT_FOUND;
     }
 }

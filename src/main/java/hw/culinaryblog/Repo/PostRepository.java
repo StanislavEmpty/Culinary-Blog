@@ -4,7 +4,8 @@ import hw.culinaryblog.Models.Post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Iterable<Post> findAllByOrderByLikesDesc();
-    Iterable<Post> findByTitleContainsIgnoreCase(String title);
-    Iterable<Post> findByDurationCookingMinutes(int durationCookingMinutes);
+    Iterable<Post> findAllByIsEnabledIsTrueOrderByLikesDesc();
+    Iterable<Post> findAllByIsEnabledIsTrueAndTitleContainsIgnoreCase(String title);
+    Iterable<Post> findAllByIsEnabledIsTrueAndDurationCookingMinutes(int durationCookingMinutes);
+    Iterable<Post> findAllByIsEnabledIsTrue();
 }

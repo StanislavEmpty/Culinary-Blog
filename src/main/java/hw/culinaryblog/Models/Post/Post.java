@@ -34,6 +34,8 @@ public class Post {
     private Long likes = 0L;
     private Long dislikes= 0L;
 
+    private Boolean isEnabled = Boolean.TRUE;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<Stage> stages;
 

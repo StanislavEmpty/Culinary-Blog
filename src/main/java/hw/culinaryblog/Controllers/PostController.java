@@ -23,7 +23,7 @@ import java.net.http.HttpResponse;
 
 @RestController
 @RequestMapping(value = "/api/posts", produces = { "application/json" })
-@Tag(name="Posts")
+@Tag(name="Посты")
 @SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 public class PostController {
@@ -43,7 +43,7 @@ public class PostController {
     )
     @GetMapping("/popular")
     public Iterable<PostResponse> getPopularPosts() {
-        return postService.findPopularPosts();
+        return postService.findPopular();
     }
 
     @Operation(
@@ -67,10 +67,10 @@ public class PostController {
     )
     @PostMapping("/comment-new/{postId}")
     public ResponseEntity<CommentResponse> addCommentToPost(@PathVariable Long postId, @ModelAttribute Comment comment) {
-        CommentResponse savedComment = postService.addCommentToPost(postId, comment);
+        CommentResponse savedComment = postService.addComment(postId, comment);
         if (savedComment == null) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found"
+                    HttpStatus.NOT_FOUND, "Entity not found"
             );
         }
         return ResponseEntity.ok().body(savedComment);
@@ -84,7 +84,7 @@ public class PostController {
         CommentResponse result = postService.editComment(commentId, content);
         if (result == null) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found"
+                    HttpStatus.NOT_FOUND, "Entity not found"
             );
         }
         return ResponseEntity.ok().body(result);
@@ -98,7 +98,7 @@ public class PostController {
     public void deleteCommentFromPost(@PathVariable Long postId, @PathVariable Long commentId) {
         if (!postService.deleteComment(postId, commentId)) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found"
+                    HttpStatus.NOT_FOUND, "Entity not found"
             );
         }
     }
@@ -108,7 +108,7 @@ public class PostController {
     )
     @GetMapping("/like/{id}")
     public ResponseEntity<Post> likePost(@PathVariable Long id) {
-        postService.likePost(id);
+        postService.like(id);
         return ResponseEntity.ok().build();
     }
 
@@ -117,7 +117,7 @@ public class PostController {
     )
     @GetMapping("/dislike/{id}")
     public ResponseEntity<Post> dislikePost(@PathVariable Long id) {
-        postService.dislikePost(id);
+        postService.dislike(id);
         return ResponseEntity.ok().build();
     }
 
@@ -141,12 +141,36 @@ public class PostController {
     }
 
     @Operation(
+            summary = "Бан поста"
+    )
+    @PostMapping("/ban/{id}")
+    public HttpStatus banPost(@PathVariable Long id) {
+        if (!postService.banById(id))
+        {
+            return HttpStatus.NOT_FOUND;
+        }
+        return HttpStatus.OK;
+    }
+
+    @Operation(
+            summary = "Анбан поста"
+    )
+    @PostMapping("/unban/{id}")
+    public HttpStatus unbanPost(@PathVariable Long id) {
+        if (!postService.unbanById(id))
+        {
+            return HttpStatus.NOT_FOUND;
+        }
+        return HttpStatus.OK;
+    }
+
+    @Operation(
             summary = "Изменение поста"
     )
     @PutMapping()
     public ResponseEntity<PostResponse> updatePost(@RequestBody PostUpdateDTO dto) {
         if(postService.existsById(dto.getId())) {
-            PostResponse postResponse = postService.updatePost(dto);
+            PostResponse postResponse = postService.update(dto);
             return ResponseEntity.ok(postResponse);
         }
         return ResponseEntity.notFound().build();

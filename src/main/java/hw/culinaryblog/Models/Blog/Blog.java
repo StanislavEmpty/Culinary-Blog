@@ -19,6 +19,7 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
+    private Boolean isEnabled = Boolean.TRUE;
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Collection<Post> posts;
 }

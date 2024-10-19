@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Аутентификация")
 @SecurityRequirement(name = "Bearer Authentication")
 public class ExampleController {
-    private final UserService service;
-
     @GetMapping
     @Operation(summary = "Доступен только авторизованным пользователям")
     public String example() {
@@ -31,9 +29,4 @@ public class ExampleController {
         return "Hello, admin!";
     }
 
-    @GetMapping("/get-admin")
-    @Operation(summary = "Получить роль ADMIN (для демонстрации)")
-    public void getAdmin() {
-        service.getAdmin();
-    }
 }

@@ -25,7 +25,7 @@ public class PostService {
         return new PostResponse(createdPost);
     }
 
-    public PostResponse updatePost(PostUpdateDTO dto) {
+    public PostResponse update(PostUpdateDTO dto) {
         Post currentPost = repository.findById(dto.getId()).orElse(null);
         if (currentPost == null) {
             return null;
@@ -35,7 +35,7 @@ public class PostService {
         return new PostResponse(currentPost);
     }
 
-    public void likePost(Long postId) {
+    public void like(Long postId) {
         Post currentPost = repository.findById(postId).orElse(null);
         if (currentPost == null) {
             return;
@@ -44,7 +44,7 @@ public class PostService {
         repository.save(currentPost);
     }
 
-    public void dislikePost(Long postId) {
+    public void dislike(Long postId) {
         Post currentPost = repository.findById(postId).orElse(null);
         if (currentPost == null) {
             return;
@@ -53,7 +53,7 @@ public class PostService {
         repository.save(currentPost);
     }
 
-    public CommentResponse addCommentToPost(Long postId, Comment comment) {
+    public CommentResponse addComment(Long postId, Comment comment) {
         Post currentPost = repository.findById(postId).orElse(null);
         if (currentPost == null) {
             return null;
@@ -92,7 +92,7 @@ public class PostService {
 
     public Iterable<PostResponse> findAll() {
         List<PostResponse> postResponses = new ArrayList<>();
-        for (Post post : repository.findAll()) {
+        for (Post post : repository.findAllByIsEnabledIsTrue()) {
             postResponses.add(new PostResponse(post));
         }
         return postResponses;
@@ -100,15 +100,15 @@ public class PostService {
 
     public PostResponse findById(Long id) {
         Post post = repository.findById(id).orElse(null);
-        if (post == null) {
+        if (post == null || !post.getIsEnabled()) {
             return null;
         }
         return new PostResponse(post);
     }
 
-    public Iterable<PostResponse> findPopularPosts() {
+    public Iterable<PostResponse> findPopular() {
         List<PostResponse> postResponses = new ArrayList<>();
-        for (Post post : repository.findAllByOrderByLikesDesc()) {
+        for (Post post : repository.findAllByIsEnabledIsTrueOrderByLikesDesc()) {
             postResponses.add(new PostResponse(post));
         }
         return postResponses;
@@ -116,7 +116,7 @@ public class PostService {
 
     public Iterable<PostResponse> findByTitle(String title) {
         List<PostResponse> postResponses = new ArrayList<>();
-        for (Post post : repository.findByTitleContainsIgnoreCase(title)) {
+        for (Post post : repository.findAllByIsEnabledIsTrueAndTitleContainsIgnoreCase(title)) {
             postResponses.add(new PostResponse(post));
         }
         return postResponses;
@@ -124,10 +124,30 @@ public class PostService {
 
     public Iterable<PostResponse> findByDuration(int duration) {
         List<PostResponse> postResponses = new ArrayList<>();
-        for (Post post : repository.findByDurationCookingMinutes(duration)) {
+        for (Post post : repository.findAllByIsEnabledIsTrueAndDurationCookingMinutes(duration)) {
             postResponses.add(new PostResponse(post));
         }
         return postResponses;
+    }
+
+    public Boolean banById(Long postId) {
+        Post currentPost = repository.findById(postId).orElse(null);
+        if (currentPost == null) {
+            return false;
+        }
+        currentPost.setIsEnabled(false);
+        repository.save(currentPost);
+        return true;
+    }
+
+    public Boolean unbanById(Long postId) {
+        Post currentPost = repository.findById(postId).orElse(null);
+        if (currentPost == null) {
+            return false;
+        }
+        currentPost.setIsEnabled(true);
+        repository.save(currentPost);
+        return true;
     }
 
     public boolean existsById(Long id) {

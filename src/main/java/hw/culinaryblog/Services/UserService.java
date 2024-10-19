@@ -22,6 +22,9 @@ public class UserService {
         return repository.save(user);
     }
 
+    public Iterable<User> findAll() {
+        return repository.findAll();
+    }
 
     /**
      * Создание пользователя
@@ -87,18 +90,52 @@ public class UserService {
      *
      * @return пользователь
      */
-    public User getUserById(Long id) {
+    public User findById(Long id) {
         return repository.getReferenceById(id);
     }
 
+    public Boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
     /**
-     * Выдача прав администратора текущему пользователю
+     * Выдача прав администратора пользователю
      * <p>
      */
-    @Deprecated
-    public void getAdmin() {
-        var user = getCurrentUser();
+    public void setAdminById(Long id) {
+        User user = findById(id);
+        if(user == null) {
+            return;
+        }
         user.setRole(Role.ROLE_ADMIN);
         save(user);
+    }
+
+    public Boolean deleteById(Long id) {
+        if(repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean banById(Long id) {
+        User user = findById(id);
+        if (user == null) {
+            return false;
+        }
+        user.setIsEnabled(false);
+        save(user);
+        return true;
+    }
+
+    public boolean unbanById(Long id) {
+        User user = findById(id);
+        if (user == null) {
+            return false;
+        }
+        user.setIsEnabled(true);
+        save(user);
+        return true;
     }
 }
