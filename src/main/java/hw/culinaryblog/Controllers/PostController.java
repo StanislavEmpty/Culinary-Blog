@@ -2,6 +2,7 @@ package hw.culinaryblog.Controllers;
 
 import hw.culinaryblog.Models.Comment.Comment;
 import hw.culinaryblog.Models.Comment.CommentResponse;
+import hw.culinaryblog.Models.Comment.CommentUpdateRequest;
 import hw.culinaryblog.Models.Post.Post;
 import hw.culinaryblog.Models.Post.PostCreateDTO;
 import hw.culinaryblog.Models.Post.PostResponse;
@@ -75,7 +76,7 @@ public class PostController {
             summary = "Добавление комментария для поста"
     )
     @PostMapping("/comment-new/{postId}")
-    public ResponseEntity<CommentResponse> addCommentToPost(@PathVariable Long postId, @ModelAttribute Comment comment) {
+    public ResponseEntity<CommentResponse> addCommentToPost(@PathVariable Long postId, @RequestBody Comment comment) {
         CommentResponse savedComment = postService.addComment(postId, comment);
         if (savedComment == null) {
             throw new ResponseStatusException(
@@ -89,8 +90,8 @@ public class PostController {
             summary = "Изменение комментария для поста"
     )
     @PutMapping("/comment-edit/{commentId}")
-    public ResponseEntity<CommentResponse> editComment(@PathVariable Long commentId, @RequestBody String content) {
-        CommentResponse result = postService.editComment(commentId, content);
+    public ResponseEntity<CommentResponse> editComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest request) {
+        CommentResponse result = postService.editComment(commentId, request.getContent());
         if (result == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Entity not found"

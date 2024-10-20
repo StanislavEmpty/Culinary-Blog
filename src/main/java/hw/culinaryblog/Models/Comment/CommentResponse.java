@@ -17,7 +17,6 @@ public class CommentResponse {
     private long id;
     private String author;
     private String content;
-    @JsonFormat(pattern = "dd.MM.yyyy")
     private Date date;
 
     public CommentResponse(Comment comment) {

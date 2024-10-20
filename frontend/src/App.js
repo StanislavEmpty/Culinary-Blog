@@ -11,6 +11,7 @@ import RegistrationForm from "./components/Auth/RegistrationForm";
 import MyPostsPage from "./components/Post/MyPostsPage";
 import CreatePostPage from "./components/Post/CreatePostPage";
 import EditPostPage from "./components/Post/EditPostPage";
+import ReadPostPage from "./components/Post/ReadPostPage";
 
 function App() {
     const [username, setUsername] = React.useState(
@@ -48,6 +49,7 @@ function App() {
                 <Route path="my-posts" element={<MyPostsPage />}/>
                 <Route path="/post/create" element={<CreatePostPage />}/>
                 <Route path="/post/edit/:id" element={<EditPostPage />}/>
+                <Route path="/post/:id" element={<ReadPostPage />}/>
 
             </Route>
             <Route path="*" element={<NotExistPage/>}/>
