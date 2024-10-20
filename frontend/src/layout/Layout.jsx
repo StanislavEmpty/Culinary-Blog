@@ -3,6 +3,7 @@ import {Container, Navbar, Nav, Row, Col, NavItem} from 'react-bootstrap';
 import './Layout.css';
 import {Avatar, Typography} from "@mui/material";
 import {Logout} from "@mui/icons-material";
+import {Navigate, useNavigate} from "react-router-dom";
 
 const Layout = ({
                     username = '',
@@ -10,6 +11,8 @@ const Layout = ({
                     children,
                     logoutHandler = () => console.log('logout'),
 }) => {
+    const navigate = useNavigate();
+
     return (
         <div className="d-flex flex-column min-vh-100">
             {/* Header */}
@@ -26,17 +29,16 @@ const Layout = ({
                     }} onClick={logoutHandler}/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto">
-                            <Nav.Link href="#">Home</Nav.Link>
-                            <Nav.Link href="/about">About</Nav.Link>
-                            <Nav.Link href="#">Contact</Nav.Link>
+                            <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
+                            <Nav.Link onClick={() => navigate("/my-posts")}>My posts</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
 
             {/* Main content */}
-            <main className="flex-grow-1">
-                <Container fluid className="py-4">
+            <main className="flex-grow-1 h-100">
+                <Container fluid className="py-4 px-5">
                     {children}
                 </Container>
             </main>

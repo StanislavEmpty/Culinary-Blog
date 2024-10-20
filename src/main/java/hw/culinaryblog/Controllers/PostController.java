@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping(value = "/api/posts", produces = { "application/json" })
@@ -44,6 +45,14 @@ public class PostController {
     @GetMapping("/popular")
     public Iterable<PostResponse> getPopularPosts() {
         return postService.findPopular();
+    }
+
+    @Operation(
+            summary = "Получение постов пользователя"
+    )
+    @GetMapping("/my")
+    public Iterable<PostResponse> getMyPosts() {
+        return postService.findMyPosts();
     }
 
     @Operation(
@@ -136,6 +145,7 @@ public class PostController {
     public ResponseEntity<PostResponse> createPost(@RequestBody PostCreateDTO dto) throws URISyntaxException {
         Post newPost = dto.convertToPost();
         newPost.setAuthor(userService.getCurrentUser());
+        newPost.setComments(new ArrayList<>());
         PostResponse savedPostDTO = postService.save(newPost);
         return ResponseEntity.created(new URI("/api/posts/" + savedPostDTO.getId())).body(savedPostDTO);
     }

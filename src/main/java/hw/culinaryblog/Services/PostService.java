@@ -98,6 +98,14 @@ public class PostService {
         return postResponses;
     }
 
+    public Iterable<PostResponse> findMyPosts() {
+        List<PostResponse> postResponses = new ArrayList<>();
+        for (Post post : repository.findAllByIsEnabledIsTrueAndAuthor(userService.getCurrentUser())) {
+            postResponses.add(new PostResponse(post));
+        }
+        return postResponses;
+    }
+
     public PostResponse findById(Long id) {
         Post post = repository.findById(id).orElse(null);
         if (post == null || !post.getIsEnabled()) {

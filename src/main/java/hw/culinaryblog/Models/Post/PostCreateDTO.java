@@ -23,9 +23,10 @@ public class PostCreateDTO {
     public Post convertToPost() {
         Post post = new Post();
         post.setTitle(title);
+        post.setImageUrl(imageUrl);
         post.setDurationCookingMinutes(durationCookingMinutes);
-        post.setIngredients(ingredients);
         post.setStages(stages);
+        post.setIngredients(ingredients);
         return post;
     }
 }

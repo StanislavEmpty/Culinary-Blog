@@ -12,8 +12,8 @@ const HomePage = () => {
         {
             try
             {
-                const resp = await apiService.get('/api/posts');
-                setPosts(resp.data);
+                // const resp = await apiService.get('/api/posts');
+                //setPosts(resp.data);
                 setLoading(false);
             }
             catch (e) {

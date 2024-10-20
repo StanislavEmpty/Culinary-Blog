@@ -41,6 +41,7 @@ public class PostResponse {
         this.id = post.getId();
         this.title = post.getTitle();
         this.imageUrl = post.getImageUrl();
+        this.author = post.getAuthor().getUsername();
         this.durationCookingMinutes = post.getDurationCookingMinutes();
         this.likes = post.getLikes();
         this.dislikes = post.getDislikes();

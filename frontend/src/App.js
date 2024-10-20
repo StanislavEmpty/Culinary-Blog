@@ -1,6 +1,6 @@
 import './App.css';
 import Layout from "./layout/Layout";
-import React from "react";
+import React, {useEffect} from "react";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import HomePage from "./components/HomePage";
@@ -8,10 +8,19 @@ import NotExistPage from "./components/NotExistPage";
 import RecipeBlogPage from "./components/RecipeBlogPage";
 import Login from "./components/Auth/Login";
 import RegistrationForm from "./components/Auth/RegistrationForm";
+import MyPostsPage from "./components/Post/MyPostsPage";
+import CreatePostPage from "./components/Post/CreatePostPage";
+import EditPostPage from "./components/Post/EditPostPage";
 
 function App() {
-    const [username, setUsername] = React.useState(localStorage.getItem('username'));
-    const [userRole, setUserRole] = React.useState(localStorage.getItem('role'));
+    const [username, setUsername] = React.useState(
+        localStorage.getItem('username')
+            ? localStorage.getItem('username')
+            : '');
+    const [userRole, setUserRole] = React.useState(
+        localStorage.getItem('role')
+            ? localStorage.getItem('role')
+            : '');
     const navigate = useNavigate();
 
     const logoutHandler = () => {
@@ -35,7 +44,11 @@ function App() {
                 </Layout>}>
 
                 <Route path="" element={<HomePage/>}/>
-                <Route path="blog" element={<RecipeBlogPage/>}/>
+
+                <Route path="my-posts" element={<MyPostsPage />}/>
+                <Route path="/post/create" element={<CreatePostPage />}/>
+                <Route path="/post/edit/:id" element={<EditPostPage />}/>
+
             </Route>
             <Route path="*" element={<NotExistPage/>}/>
         </Routes>
