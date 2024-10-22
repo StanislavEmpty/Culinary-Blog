@@ -3,7 +3,7 @@ import {Grid, Paper, Chip, Typography, IconButton} from '@mui/material';
 import apiService from "../../services/apiService";
 import { useParams } from "react-router-dom";
 import {ThumbDown, ThumbUp} from "@mui/icons-material";
-import CommentsSection from "../CommentsSection";
+import CommentsSection from "../small-components/CommentsSection";
 
 const defaultImageUrl = 'https://via.placeholder.com/300x300'; // Default image URL
 

@@ -1,40 +1,19 @@
-import React, {useEffect, useState} from "react";
-import {CircularProgress} from "@mui/material";
-import apiService from "../services/apiService";
-import RecipeBlogPage from "./RecipeBlogPage";
+import React, {useState} from "react";
+import RecipeBlogPage from "./Post/RecipeBlogPage";
+import SearchPostModal from "./small-components/SearchPostModal";
+import SearchButton from "./small-components/SearchButton";
 
 const HomePage = () => {
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    useEffect(() => {
-        const getPosts = async () =>
-        {
-            try
-            {
-                // const resp = await apiService.get('/api/posts');
-                //setPosts(resp.data);
-                setLoading(false);
-            }
-            catch (e) {
-                setError(e);
-                setLoading(false);
-            }
-        };
-        getPosts().catch(error => console.log(error));
-    }, []);
+
+    const [openModal, setOpenModal] = useState(false);
 
     return (
         <>
-            {loading ? (
-                <div className={"d-flex align-content-center"}>
-                    <CircularProgress color="inherit"/>
-                </div>
-            ) : error ? (
-                <h4 className="text-center">{error}</h4>
-            ): (
-                <RecipeBlogPage/>
-            )}
+            <div>
+                <SearchButton onClick={() => setOpenModal(true)} />
+                <SearchPostModal open={openModal} handleClose={() => setOpenModal(false)}/>
+            </div>
+            <RecipeBlogPage/>
         </>
     );
 };

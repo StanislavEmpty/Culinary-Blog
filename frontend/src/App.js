@@ -1,17 +1,17 @@
 import './App.css';
 import Layout from "./layout/Layout";
-import React, {useEffect} from "react";
+import React from "react";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import HomePage from "./components/HomePage";
 import NotExistPage from "./components/NotExistPage";
-import RecipeBlogPage from "./components/RecipeBlogPage";
 import Login from "./components/Auth/Login";
 import RegistrationForm from "./components/Auth/RegistrationForm";
 import MyPostsPage from "./components/Post/MyPostsPage";
 import CreatePostPage from "./components/Post/CreatePostPage";
 import EditPostPage from "./components/Post/EditPostPage";
 import ReadPostPage from "./components/Post/ReadPostPage";
+import FindPostsPage from "./components/Post/FindPostsPage";
 
 function App() {
     const [username, setUsername] = React.useState(
@@ -50,6 +50,9 @@ function App() {
                 <Route path="/post/create" element={<CreatePostPage />}/>
                 <Route path="/post/edit/:id" element={<EditPostPage />}/>
                 <Route path="/post/:id" element={<ReadPostPage />}/>
+                <Route path="/post/search/title/:title" element={<FindPostsPage />}/>
+                <Route path="/post/search/duration/:duration" element={<FindPostsPage />}/>
+
 
             </Route>
             <Route path="*" element={<NotExistPage/>}/>

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import {Card, CardContent, Typography, Button, Chip, IconButton} from '@mui/material';
-import {ThumbDown, ThumbUp, Timer} from "@mui/icons-material";
-import apiService from "../services/apiService";
-import {useNavigate} from "react-router-dom";
-
 // Карточка с постом рецепта
+import {useNavigate} from "react-router-dom";
+import {useState} from "react";
+import apiService from "../../services/apiService";
+import {Button, Card, CardContent, Chip, IconButton, Typography} from "@mui/material";
+import {Col, Row} from "react-bootstrap";
+import {ThumbDown, ThumbUp, Timer} from "@mui/icons-material";
+
 const RecipeCard = ({ recipe }) => {
     const navigate = useNavigate();
     const [likes, setLikes] = useState(recipe.likes);
@@ -77,42 +77,4 @@ const RecipeCard = ({ recipe }) => {
     );
 };
 
-// Главная страница блога
-const RecipeBlogPage = () => {
-    const [posts, setPosts] = useState([]);
-
-    useEffect(() => {
-        const getData = async () => {
-            try
-            {
-                const resp = await apiService.get('/api/posts');
-                if(resp.status === 200)
-                {
-                    setPosts(resp.data)
-                    console.log(resp.data)
-                }
-            }
-            catch (e)
-            {
-                console.error('Error fetch. ' + e)
-            }
-        }
-        getData().catch(e => console.error(e));
-    }, []);
-
-
-
-    return (
-        <Container>
-            <Row>
-                {posts.map((post, index) => (
-                    <Col key={index} xs={12}>
-                        <RecipeCard recipe={post} />
-                    </Col>
-                ))}
-            </Row>
-        </Container>
-    );
-}
-
-export default RecipeBlogPage;
+export default RecipeCard;

@@ -3,7 +3,7 @@ import { Paper, Box, Typography, IconButton, TextField, Button } from "@mui/mate
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
-import apiService from "../services/apiService";
+import apiService from "../../services/apiService";
 
 function CommentsSection({ comments, setComments, postId }) {
     const [newComment, setNewComment] = useState("");

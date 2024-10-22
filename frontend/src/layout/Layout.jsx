@@ -1,9 +1,9 @@
 import React from 'react';
-import {Container, Navbar, Nav, Row, Col, NavItem} from 'react-bootstrap';
+import {Container, Navbar, Nav, Row, Col} from 'react-bootstrap';
 import './Layout.css';
 import {Avatar, Typography} from "@mui/material";
 import {Logout} from "@mui/icons-material";
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Layout = ({
                     username = '',
