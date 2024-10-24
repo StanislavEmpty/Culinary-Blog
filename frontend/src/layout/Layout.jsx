@@ -13,15 +13,23 @@ const Layout = ({
 }) => {
     const navigate = useNavigate();
 
+    const goToUserProfile = () =>
+    {
+        navigate('/user/profile');
+    }
+
     return (
         <div className="d-flex flex-column min-vh-100">
             {/* Header */}
             <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
                 <Container>
-                    <Avatar>{username[0]}</Avatar>
-                    <Typography sx={{
+                    <Avatar onClick={goToUserProfile} sx={{
+                        cursor: 'pointer'
+                    }}>{username[0]}</Avatar>
+                    <Typography onClick={goToUserProfile} sx={{
                         minWidth: 50,
-                        color: '#ccc'
+                        color: '#ccc',
+                        cursor: 'pointer'
                     }}>{username}</Typography>
                     <Logout fontSize="small" sx={{
                         color: '#ccc',

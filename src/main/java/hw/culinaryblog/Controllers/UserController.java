@@ -31,8 +31,23 @@ public class UserController {
             summary = "Получение пользователя по идентификатору"
     )
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
+    public User getUserByUserId(@PathVariable Long id) {
         return userService.findById(id);
+    }
+
+    @Operation(
+            summary = "Получение текущего пользователя"
+    )
+    @GetMapping("/get-current-user")
+    public UserUpdateDTO getUserByUserName() {
+        User currentUser = userService.getCurrentUser();
+        return new UserUpdateDTO(
+            currentUser.getId(),
+            currentUser.getUsername(),
+            currentUser.getEmail(),
+            currentUser.getAvatarUrl(),
+            currentUser.getBio()
+        );
     }
 
     @Operation(
@@ -42,6 +57,10 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO dto) {
         if (userService.existsById(id)) {
             User currentUser = userService.findById(id);
+            currentUser.setUsername(dto.getUsername());
+            currentUser.setEmail(dto.getEmail());
+            currentUser.setAvatarUrl(dto.getAvatarUrl());
+            currentUser.setBio(dto.getBio());
             userService.save(currentUser);
             return ResponseEntity.ok(currentUser);
         }

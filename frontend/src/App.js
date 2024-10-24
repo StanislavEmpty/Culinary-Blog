@@ -12,6 +12,7 @@ import CreatePostPage from "./components/Post/CreatePostPage";
 import EditPostPage from "./components/Post/EditPostPage";
 import ReadPostPage from "./components/Post/ReadPostPage";
 import FindPostsPage from "./components/Post/FindPostsPage";
+import UserProfilePage from "./components/User/UserProfilePage";
 
 function App() {
     const [username, setUsername] = React.useState(
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/post/search/title/:title" element={<FindPostsPage />}/>
                 <Route path="/post/search/duration/:duration" element={<FindPostsPage />}/>
 
+                <Route path="/user/profile" element={<UserProfilePage />}/>
 
             </Route>
             <Route path="*" element={<NotExistPage/>}/>
