@@ -47,7 +47,7 @@ const RecipeCard = ({ recipe }) => {
                             {recipe.title} <Timer/> <Chip label={recipe.durationCookingMinutes + "m"}/>
                         </Typography>
                         <Typography variant="body2" color="text.secondary" style={{ marginTop: '10px' }}>
-                            {recipe.stages[0].description || 'No stages'} <Chip label={"..."} className={"h3 fw-bold fw2-l"}/>
+                            {recipe.stages[0] ? recipe.stages[0].description : 'No stages'} <Chip label={"..."} className={"h3 fw-bold fw2-l"}/>
                         </Typography>
                         <Typography variant="h6" component="div" style={{ marginTop: '15px' }}>
                             Ингредиенты:

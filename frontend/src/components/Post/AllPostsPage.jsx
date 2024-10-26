@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
-import { Delete, Edit } from "@mui/icons-material";
+import {BlockOutlined, Delete, Edit, Undo} from "@mui/icons-material";
 import {Button, Chip, IconButton} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import apiService from "../../services/apiService";
 
-const MyPostsPage = () => {
+const AllPostsPage = () => {
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const MyPostsPage = () => {
         {
             try
             {
-                const resp = await apiService.get('/api/posts/my');
+                const resp = await apiService.get('/api/posts');
                 if(resp.status === 200)
                 {
                     setPosts(resp.data)
@@ -40,6 +40,36 @@ const MyPostsPage = () => {
             console.error("Error fetch." + error)
         }
         setPosts(posts.filter(post => post.id !== id));
+    };
+
+    // Блокирование поста
+    const banPost = async (id) => {
+        try
+        {
+            await apiService.post(`/api/posts/ban/${id}`);
+            setPosts(posts.map(post =>
+                post.id === id ? { ...post, isEnabled: false } : post
+            ));
+        }
+        catch (error)
+        {
+            console.error("Error fetch." + error)
+        }
+    };
+
+    // Разблокирование поста
+    const unbanPost = async (id) => {
+        try
+        {
+            await apiService.post(`/api/posts/unban/${id}`);
+            setPosts(posts.map(post =>
+                post.id === id ? { ...post, isEnabled: true } : post
+            ));
+        }
+        catch (error)
+        {
+            console.error("Error fetch." + error)
+        }
     };
 
     return (
@@ -75,8 +105,18 @@ const MyPostsPage = () => {
                                         <Edit/>
                                     </IconButton>
                                     <IconButton onClick={() => deletePost(post.id)}>
-                                        <Delete />
+                                        <Delete/>
                                     </IconButton>
+                                    {post.isEnabled ? (
+                                            <IconButton onClick={() => banPost(post.id)}>
+                                                <BlockOutlined/>
+                                            </IconButton>
+                                        )
+                                        : (
+                                            <IconButton onClick={() => unbanPost(post.id)}>
+                                                <Undo/>
+                                            </IconButton>
+                                        )}
                                 </td>
                             </tr>
                         ))}
@@ -88,4 +128,4 @@ const MyPostsPage = () => {
     );
 };
 
-export default MyPostsPage;
+export default AllPostsPage;

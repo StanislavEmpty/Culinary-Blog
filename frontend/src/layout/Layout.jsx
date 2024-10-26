@@ -4,7 +4,7 @@ import './Layout.css';
 import {Avatar, Chip, Typography} from "@mui/material";
 import {Logout} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
-import {getRoleDisplayName} from "../constants/roles";
+import {getRoleDisplayName, Roles} from "../constants/roles";
 
 const Layout = ({
                     username = '',
@@ -19,7 +19,6 @@ const Layout = ({
     {
         navigate('/user/profile');
     }
-
     return (
         <div className="d-flex flex-column min-vh-100">
             {/* Header */}
@@ -45,7 +44,11 @@ const Layout = ({
                         <Nav className="ms-auto">
                             <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
                             <Nav.Link onClick={() => navigate("/my-posts")}>My posts</Nav.Link>
-                            <Nav.Link onClick={() => navigate("/user")}>Users</Nav.Link>
+                            {userRole !== 'ROLE_ADMIN' ? '' :
+                                (<>
+                                    <Nav.Link onClick={() => navigate("/user")}>Users</Nav.Link>
+                                    <Nav.Link onClick={() => navigate("/all-posts")}>All posts</Nav.Link>
+                                </>)}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

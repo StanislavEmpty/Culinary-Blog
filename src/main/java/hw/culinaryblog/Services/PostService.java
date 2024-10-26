@@ -4,6 +4,7 @@ import hw.culinaryblog.Models.Comment.Comment;
 import hw.culinaryblog.Models.Comment.CommentResponse;
 import hw.culinaryblog.Models.Post.Post;
 import hw.culinaryblog.Models.Post.PostResponse;
+import hw.culinaryblog.Models.Post.PostShortResponse;
 import hw.culinaryblog.Models.Post.PostUpdateDTO;
 import hw.culinaryblog.Repo.CommentRepository;
 import hw.culinaryblog.Repo.PostRepository;
@@ -90,18 +91,18 @@ public class PostService {
         return true;
     }
 
-    public Iterable<PostResponse> findAll() {
-        List<PostResponse> postResponses = new ArrayList<>();
-        for (Post post : repository.findAllByIsEnabledIsTrue()) {
-            postResponses.add(new PostResponse(post));
+    public Iterable<PostShortResponse> findAll() {
+        List<PostShortResponse> postResponses = new ArrayList<>();
+        for (Post post : repository.findAll()) {
+            postResponses.add(new PostShortResponse(post));
         }
         return postResponses;
     }
 
-    public Iterable<PostResponse> findMyPosts() {
-        List<PostResponse> postResponses = new ArrayList<>();
-        for (Post post : repository.findAllByIsEnabledIsTrueAndAuthor(userService.getCurrentUser())) {
-            postResponses.add(new PostResponse(post));
+    public Iterable<PostShortResponse> findMyPosts() {
+        List<PostShortResponse> postResponses = new ArrayList<>();
+        for (Post post : repository.findAllByAuthor(userService.getCurrentUser())) {
+            postResponses.add(new PostShortResponse(post));
         }
         return postResponses;
     }

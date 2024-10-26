@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import apiService from "../../services/apiService";
 import { getRoleDisplayName } from "../../constants/roles";
 
-const UserListPage = () => {
+const UserListPage = ({username}) => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ const UserListPage = () => {
                                 }}>
                                     <Avatar src={user.avatarUrl || "https://via.placeholder.com/50"} alt="Avatar"/>
                                 </td>
-                                <td>{user.username} {user.username === localStorage.getItem('username') ? '(Вы)' : ''}</td>
+                                <td>{user.username} {user.username === username ? '(Вы)' : ''}</td>
                                 <td>{user.email}</td>
                                 <td>{getRoleDisplayName(user.role)}</td>
                                 <td>
@@ -66,12 +66,16 @@ const UserListPage = () => {
                                     : (<Chip label='Не активен' color='danger' variant='outlined'/>)}
                                 </td>
                                 <td>
-                                    <IconButton onClick={() => navigate("/user/edit/" + user.id)}>
-                                        <Edit/>
-                                    </IconButton>
-                                    <IconButton onClick={() => deleteUser(user.id)}>
-                                        <Delete/>
-                                    </IconButton>
+                                    {user.username === username ? '' : (
+                                        <>
+                                            <IconButton onClick={() => navigate("/user/edit/" + user.id)}>
+                                                <Edit/>
+                                            </IconButton>
+                                            <IconButton onClick={() => deleteUser(user.id)}>
+                                                <Delete/>
+                                            </IconButton>
+                                        </>
+                                    )}
                                 </td>
                             </tr>
                         ))}

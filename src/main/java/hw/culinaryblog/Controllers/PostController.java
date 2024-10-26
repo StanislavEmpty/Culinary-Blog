@@ -3,10 +3,7 @@ package hw.culinaryblog.Controllers;
 import hw.culinaryblog.Models.Comment.Comment;
 import hw.culinaryblog.Models.Comment.CommentResponse;
 import hw.culinaryblog.Models.Comment.CommentUpdateRequest;
-import hw.culinaryblog.Models.Post.Post;
-import hw.culinaryblog.Models.Post.PostCreateDTO;
-import hw.culinaryblog.Models.Post.PostResponse;
-import hw.culinaryblog.Models.Post.PostUpdateDTO;
+import hw.culinaryblog.Models.Post.*;
 import hw.culinaryblog.Services.PostService;
 import hw.culinaryblog.Services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +33,7 @@ public class PostController {
             summary = "Получение всех постов"
     )
     @GetMapping
-    public Iterable<PostResponse> getPosts() {
+    public Iterable<PostShortResponse> getPosts() {
         return postService.findAll();
     }
 
@@ -52,7 +49,7 @@ public class PostController {
             summary = "Получение постов пользователя"
     )
     @GetMapping("/my")
-    public Iterable<PostResponse> getMyPosts() {
+    public Iterable<PostShortResponse> getMyPosts() {
         return postService.findMyPosts();
     }
 

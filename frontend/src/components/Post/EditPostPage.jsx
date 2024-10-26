@@ -5,10 +5,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import apiService from "../../services/apiService";
 import { useNavigate, useParams } from "react-router-dom";
+import {Roles} from "../../constants/roles";
 
 const defaultImageUrl = 'https://via.placeholder.com/300x300'; // Default image URL
 
-const EditPostPage = () => {
+const EditPostPage = ({username, role}) => {
     const { id } = useParams(); // Get the post ID from the URL
     const navigate = useNavigate();
     const [ingredients, setIngredients] = useState([]);
@@ -34,6 +35,10 @@ const EditPostPage = () => {
                 const postResp = await apiService.get(`/api/posts/${id}`);
                 if (postResp.status === 200) {
                     setPost(postResp.data);
+                    if(username !== postResp.data.author && role !== 'ROLE_ADMIN')
+                    {
+                        navigate('/');
+                    }
                 }
                 const getIngredientsResp = await apiService.get('/api/ingredients');
                 if (getIngredientsResp.status === 200) {
@@ -43,6 +48,7 @@ const EditPostPage = () => {
                 console.log('Error fetching data: ' + e);
             }
         };
+
         getPostData();
     }, [id]);
 

@@ -3,7 +3,7 @@ import { TextField, Button, Paper, Avatar, Grid, FormControlLabel, Checkbox, Men
 import apiService from "../../services/apiService";
 import {useNavigate, useParams} from "react-router-dom";
 
-const UserEditPage = () => {
+const UserEditPage = ({username}) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState({
@@ -21,6 +21,10 @@ const UserEditPage = () => {
             try {
                 const response = await apiService.get('/api/users/' + id);
                 if (response.status === 200) {
+                    if(response.data.username === username)
+                    {
+                        navigate('/');
+                    }
                     setUser(response.data);
                 }
             } catch (error) {

@@ -10,7 +10,7 @@ const RecipeBlogPage = () => {
         const getData = async () => {
             try
             {
-                const resp = await apiService.get('/api/posts');
+                const resp = await apiService.get('/api/posts/popular');
                 if(resp.status === 200)
                 {
                     setPosts(resp.data)

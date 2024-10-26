@@ -16,6 +16,7 @@ import UserProfilePage from "./components/User/UserProfilePage";
 import UserListPage from "./components/User/UserListPage";
 import UserEditPage from "./components/User/UserEditPage";
 import apiService from "./services/apiService";
+import AllPostsPage from "./components/Post/AllPostsPage";
 
 function App() {
     const [username, setUsername] = React.useState(
@@ -43,7 +44,6 @@ function App() {
             try
             {
                 const respUser = await apiService.get('/api/users/get-current-user');
-                console.log(respUser.data)
                 setUserRole(respUser.data.role);
                 setAvatarUrl(respUser.data.avatarUrl);
             }
@@ -69,19 +69,22 @@ function App() {
 
                 <Route path="" element={<HomePage/>}/>
 
-                <Route path="my-posts" element={<MyPostsPage />}/>
+                {/*For users*/}
+                <Route path="/my-posts" element={<MyPostsPage />}/>
                 <Route path="/post/create" element={<CreatePostPage />}/>
-                <Route path="/post/edit/:id" element={<EditPostPage />}/>
+                <Route path="/post/edit/:id" element={<EditPostPage username={username} role={userRole} />}/>
                 <Route path="/post/:id" element={<ReadPostPage />}/>
                 <Route path="/post/search/title/:title" element={<FindPostsPage />}/>
                 <Route path="/post/search/duration/:duration" element={<FindPostsPage />}/>
+                {/*!For users*/}
 
                 <Route path="/user/profile" element={<UserProfilePage />}/>
 
-                <Route path="/user/" element={<UserListPage />}/>
-                <Route path="/user/edit/:id" element={<UserEditPage />}/>
-
-
+                {/*For admins*/}
+                <Route path="/user/" element={<UserListPage username={username} />}/>
+                <Route path="/user/edit/:id" element={<UserEditPage username={username} />}/>
+                <Route path="/all-posts" element={<AllPostsPage />}/>
+                {/*!For admins*/}
             </Route>
             <Route path="*" element={<NotExistPage/>}/>
         </Routes>

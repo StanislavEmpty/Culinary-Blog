@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     Iterable<Post> findAllByIsEnabledIsTrueOrderByLikesDesc();
-    Iterable<Post> findAllByIsEnabledIsTrueAndAuthor(User author);
+    Iterable<Post> findAllByAuthor(User author);
     Iterable<Post> findAllByIsEnabledIsTrueAndTitleContainsIgnoreCase(String title);
     Iterable<Post> findAllByIsEnabledIsTrueAndDurationCookingMinutes(int durationCookingMinutes);
-    Iterable<Post> findAllByIsEnabledIsTrue();
 }

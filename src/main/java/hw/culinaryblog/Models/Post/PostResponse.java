@@ -17,7 +17,7 @@ import java.util.Collection;
 @Getter
 @Setter
 public class PostResponse {
-    private long id;
+    private Long id;
 
     private String title;
 
