@@ -7,7 +7,7 @@ import CommentsSection from "../small-components/CommentsSection";
 
 const defaultImageUrl = 'https://via.placeholder.com/300x300'; // Default image URL
 
-const ReadPostPage = () => {
+const ReadPostPage = ({username, role}) => {
     const { id } = useParams(); // Get the post ID from the URL
     const [post, setPost] = useState({
         title: '',
@@ -78,10 +78,8 @@ const ReadPostPage = () => {
                             />
                         </div>
 
-                        {/* Post Title */}
                         <h2>{post.title}</h2>
 
-                        {/* Duration */}
                         <p>Duration: {post.durationCookingMinutes} minutes</p>
 
                         <Typography component={'span'} variant="body2" color="text.secondary" style={{marginTop: '10px'}}>
@@ -100,7 +98,7 @@ const ReadPostPage = () => {
                         </div>
 
                         <Paper elevation={3} style={{ padding: '16px' }}>
-                            <CommentsSection comments={post.comments} setComments={setComments} postId={post.id}/>
+                            <CommentsSection comments={post.comments} setComments={setComments} postId={post.id} username={username} role={role}/>
                         </Paper>
                     </Paper>
                 </Grid>

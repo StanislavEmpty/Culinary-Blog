@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
 import apiService from "../../services/apiService";
 
-function CommentsSection({ comments, setComments, postId }) {
+function CommentsSection({ comments, setComments, postId, username, role }) {
     const [newComment, setNewComment] = useState("");
     const [editCommentId, setEditCommentId] = useState(null);
 
@@ -138,18 +138,22 @@ function CommentsSection({ comments, setComments, postId }) {
                                 gap: "5px",
                             }}
                         >
-                            <IconButton
-                                size="small"
-                                onClick={() => handleEditComment(comment.id, comment.content)}
-                            >
-                                <EditIcon fontSize="small" />
-                            </IconButton>
-                            <IconButton
-                                size="small"
-                                onClick={() => handleDeleteComment(comment.id)}
-                            >
-                                <DeleteIcon fontSize="small" />
-                            </IconButton>
+                            {username !== comment.author && role !== 'ROLE_ADMIN' ? '' : (
+                                <>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleEditComment(comment.id, comment.content)}
+                                    >
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleDeleteComment(comment.id)}
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </>
+                            )}
                         </Box>
                     </Box>
                 ))}

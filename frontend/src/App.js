@@ -73,7 +73,7 @@ function App() {
                 <Route path="/my-posts" element={<MyPostsPage />}/>
                 <Route path="/post/create" element={<CreatePostPage />}/>
                 <Route path="/post/edit/:id" element={<EditPostPage username={username} role={userRole} />}/>
-                <Route path="/post/:id" element={<ReadPostPage />}/>
+                <Route path="/post/:id" element={<ReadPostPage username={username} role={userRole} />}/>
                 <Route path="/post/search/title/:title" element={<FindPostsPage />}/>
                 <Route path="/post/search/duration/:duration" element={<FindPostsPage />}/>
                 {/*!For users*/}
