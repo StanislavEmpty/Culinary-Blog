@@ -18,7 +18,6 @@ const MyPostsPage = () => {
                 if(resp.status === 200)
                 {
                     setPosts(resp.data)
-                    console.log(resp)
                 }
             }
             catch (e)

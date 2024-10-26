@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -22,8 +25,20 @@ public class UserService {
         return repository.save(user);
     }
 
-    public Iterable<User> findAll() {
-        return repository.findAll();
+    public Iterable<UserResponse> findAll() {
+        List<UserResponse> responses = new ArrayList<>();
+        for (User user : repository.findAll()) {
+            responses.add(new UserResponse(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getAvatarUrl(),
+                    user.getBio(),
+                    user.getRole(),
+                    user.isEnabled()
+            ));
+        }
+        return responses;
     }
 
     /**
@@ -90,8 +105,26 @@ public class UserService {
      *
      * @return пользователь
      */
-    public User findById(Long id) {
-        return repository.getReferenceById(id);
+    public UserResponse findById(Long id) {
+        User user = repository.getReferenceById(id);
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getAvatarUrl(),
+                user.getBio(),
+                user.getRole(),
+                user.isEnabled()
+        );
+    }
+
+    /**
+     * Получить данные пользователя по ID
+     *
+     * @return пользователь
+     */
+    public User getById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     public Boolean existsById(Long id) {
@@ -103,11 +136,32 @@ public class UserService {
      * <p>
      */
     public void setAdminById(Long id) {
-        User user = findById(id);
-        if(user == null) {
+        User user = repository.findById(id).orElse(null);
+        if (user == null) {
             return;
         }
         user.setRole(Role.ROLE_ADMIN);
+        save(user);
+    }
+
+    public void updateById(Long id, UserUpdateDTO dto) {
+        User user = repository.findById(id).orElse(null);
+        if (user == null) {
+            return;
+        }
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setAvatarUrl(dto.getAvatarUrl());
+        user.setBio(dto.getBio());
+        repository.save(user);
+    }
+
+    public void updateRole(Long id, UpdateRoleRequest roleRequest) {
+        User user = repository.findById(id).orElse(null);
+        if (user == null) {
+            return;
+        }
+        user.setRole(roleRequest.getRole());
         save(user);
     }
 
@@ -120,7 +174,7 @@ public class UserService {
     }
 
     public boolean banById(Long id) {
-        User user = findById(id);
+        User user = repository.findById(id).orElse(null);
         if (user == null) {
             return false;
         }
@@ -130,7 +184,7 @@ public class UserService {
     }
 
     public boolean unbanById(Long id) {
-        User user = findById(id);
+        User user = repository.findById(id).orElse(null);
         if (user == null) {
             return false;
         }

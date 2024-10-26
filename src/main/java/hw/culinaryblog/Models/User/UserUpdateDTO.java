@@ -27,6 +27,8 @@ public class UserUpdateDTO {
     @Schema(description = "Ссылка на аватар", example = "https://example.com")
     private String avatarUrl;
 
-    @Schema(description = "Биогравфия", example = "Родился там то.. Делает то-то...")
+    @Schema(description = "Биография", example = "Родился там то.. Делает то-то...")
     private String bio;
+
+
 }

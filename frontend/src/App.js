@@ -1,6 +1,6 @@
 import './App.css';
 import Layout from "./layout/Layout";
-import React from "react";
+import React, {useEffect} from "react";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import HomePage from "./components/HomePage";
@@ -13,16 +13,19 @@ import EditPostPage from "./components/Post/EditPostPage";
 import ReadPostPage from "./components/Post/ReadPostPage";
 import FindPostsPage from "./components/Post/FindPostsPage";
 import UserProfilePage from "./components/User/UserProfilePage";
+import UserListPage from "./components/User/UserListPage";
+import UserEditPage from "./components/User/UserEditPage";
+import apiService from "./services/apiService";
 
 function App() {
     const [username, setUsername] = React.useState(
         localStorage.getItem('username')
             ? localStorage.getItem('username')
             : '');
-    const [userRole, setUserRole] = React.useState(
-        localStorage.getItem('role')
-            ? localStorage.getItem('role')
-            : '');
+
+    const [userRole, setUserRole] = React.useState('');
+    const [avatarUrl, setAvatarUrl] = React.useState('');
+
     const navigate = useNavigate();
 
     const logoutHandler = () => {
@@ -33,6 +36,25 @@ function App() {
         localStorage.removeItem('token');
         navigate('/sign-in');
     }
+
+    useEffect(() => {
+        const getUser = async () =>
+        {
+            try
+            {
+                const respUser = await apiService.get('/api/users/get-current-user');
+                console.log(respUser.data)
+                setUserRole(respUser.data.role);
+                setAvatarUrl(respUser.data.avatarUrl);
+            }
+            catch (e)
+            {
+                console.error(e)
+            }
+        };
+        getUser();
+    }, []);
+
   return (
     <div className="App">
         <Routes>
@@ -41,7 +63,7 @@ function App() {
                 <Route path="sign-up" element={<RegistrationForm/>}/>
             </Route>
             <Route element={
-                <Layout username={username} userRole={userRole} logoutHandler={logoutHandler}>
+                <Layout username={username} userRole={userRole} avatarUrl={avatarUrl} logoutHandler={logoutHandler}>
                     <ProtectedRoute isAllowed={!!username}/>
                 </Layout>}>
 
@@ -55,6 +77,10 @@ function App() {
                 <Route path="/post/search/duration/:duration" element={<FindPostsPage />}/>
 
                 <Route path="/user/profile" element={<UserProfilePage />}/>
+
+                <Route path="/user/" element={<UserListPage />}/>
+                <Route path="/user/edit/:id" element={<UserEditPage />}/>
+
 
             </Route>
             <Route path="*" element={<NotExistPage/>}/>

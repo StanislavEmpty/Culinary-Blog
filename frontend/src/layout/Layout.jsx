@@ -1,13 +1,15 @@
 import React from 'react';
 import {Container, Navbar, Nav, Row, Col} from 'react-bootstrap';
 import './Layout.css';
-import {Avatar, Typography} from "@mui/material";
+import {Avatar, Chip, Typography} from "@mui/material";
 import {Logout} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import {getRoleDisplayName} from "../constants/roles";
 
 const Layout = ({
                     username = '',
-                    userRole = null,
+                    userRole = '',
+                    avatarUrl = '',
                     children,
                     logoutHandler = () => console.log('logout'),
 }) => {
@@ -23,14 +25,18 @@ const Layout = ({
             {/* Header */}
             <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
                 <Container>
-                    <Avatar onClick={goToUserProfile} sx={{
-                        cursor: 'pointer'
-                    }}>{username[0]}</Avatar>
+                    {!avatarUrl
+                        ? (<Avatar onClick={goToUserProfile} sx={{cursor: 'pointer'}}>{username[0]}</Avatar>)
+                        : (<Avatar onClick={goToUserProfile} sx={{cursor: 'pointer'}} src={avatarUrl}/>)
+                    }
                     <Typography onClick={goToUserProfile} sx={{
                         minWidth: 50,
+                        marginLeft: '1em',
+                        marginRight: '0.3em',
                         color: '#ccc',
                         cursor: 'pointer'
                     }}>{username}</Typography>
+                    <Chip label={getRoleDisplayName(userRole)} sx={{ marginLeft: '0.2em', marginRight: '1em', userSelect: 'none' }} color='info' variant='outlined'/>
                     <Logout fontSize="small" sx={{
                         color: '#ccc',
                         cursor: 'pointer'
@@ -39,6 +45,7 @@ const Layout = ({
                         <Nav className="ms-auto">
                             <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
                             <Nav.Link onClick={() => navigate("/my-posts")}>My posts</Nav.Link>
+                            <Nav.Link onClick={() => navigate("/user")}>Users</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

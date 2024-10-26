@@ -1,6 +1,8 @@
 package hw.culinaryblog.Controllers;
 
+import hw.culinaryblog.Models.User.UpdateRoleRequest;
 import hw.culinaryblog.Models.User.User;
+import hw.culinaryblog.Models.User.UserResponse;
 import hw.culinaryblog.Models.User.UserUpdateDTO;
 import hw.culinaryblog.Services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +25,7 @@ public class UserController {
             summary = "Получение всех пользователей"
     )
     @GetMapping
-    public Iterable<User> getUsers() {
+    public Iterable<UserResponse> getUsers() {
         return userService.findAll();
     }
 
@@ -31,7 +33,7 @@ public class UserController {
             summary = "Получение пользователя по идентификатору"
     )
     @GetMapping("/{id}")
-    public User getUserByUserId(@PathVariable Long id) {
+    public UserResponse getUserByUserId(@PathVariable Long id) {
         return userService.findById(id);
     }
 
@@ -39,14 +41,16 @@ public class UserController {
             summary = "Получение текущего пользователя"
     )
     @GetMapping("/get-current-user")
-    public UserUpdateDTO getUserByUserName() {
+    public UserResponse getUserByUserName() {
         User currentUser = userService.getCurrentUser();
-        return new UserUpdateDTO(
+        return new UserResponse(
             currentUser.getId(),
             currentUser.getUsername(),
             currentUser.getEmail(),
             currentUser.getAvatarUrl(),
-            currentUser.getBio()
+            currentUser.getBio(),
+            currentUser.getRole(),
+            currentUser.getIsEnabled()
         );
     }
 
@@ -54,17 +58,24 @@ public class UserController {
             summary = "Изменение пользователя"
     )
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO dto) {
+    public HttpStatus updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO dto) {
         if (userService.existsById(id)) {
-            User currentUser = userService.findById(id);
-            currentUser.setUsername(dto.getUsername());
-            currentUser.setEmail(dto.getEmail());
-            currentUser.setAvatarUrl(dto.getAvatarUrl());
-            currentUser.setBio(dto.getBio());
-            userService.save(currentUser);
-            return ResponseEntity.ok(currentUser);
+            userService.updateById(id, dto);
+            return HttpStatus.OK;
         }
-        return ResponseEntity.notFound().build();
+        return HttpStatus.BAD_REQUEST;
+    }
+
+    @Operation(
+            summary = "Установка роли пользователя"
+    )
+    @PostMapping("/set-role/{id}")
+    public HttpStatus setRoleById(@PathVariable Long id, @RequestBody UpdateRoleRequest request) {
+        if (userService.existsById(id)) {
+            userService.updateRole(id, request);
+            return HttpStatus.OK;
+        }
+        return HttpStatus.BAD_REQUEST;
     }
 
     @Operation(
@@ -74,7 +85,7 @@ public class UserController {
     public HttpStatus banUser(@PathVariable Long id) {
         if(userService.banById(id))
             return HttpStatus.OK;
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.BAD_REQUEST;
     }
 
     @Operation(
@@ -84,7 +95,7 @@ public class UserController {
     public HttpStatus unbanUser(@PathVariable Long id) {
         if(userService.unbanById(id))
             return HttpStatus.OK;
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.BAD_REQUEST;
     }
 
     @Operation(
@@ -94,6 +105,6 @@ public class UserController {
     public HttpStatus deleteUser(@PathVariable Long id) {
         if(userService.deleteById(id))
             return HttpStatus.OK;
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.BAD_REQUEST;
     }
 }
