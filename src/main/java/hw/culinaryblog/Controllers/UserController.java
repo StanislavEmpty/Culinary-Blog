@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class UserController {
             summary = "Получение всех пользователей"
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Iterable<UserResponse> getUsers() {
         return userService.findAll();
     }
@@ -70,6 +72,7 @@ public class UserController {
             summary = "Установка роли пользователя"
     )
     @PostMapping("/set-role/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus setRoleById(@PathVariable Long id, @RequestBody UpdateRoleRequest request) {
         if (userService.existsById(id)) {
             userService.updateRole(id, request);
@@ -82,6 +85,7 @@ public class UserController {
             summary = "Бан пользователя"
     )
     @PostMapping("/ban/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus banUser(@PathVariable Long id) {
         if(userService.banById(id))
             return HttpStatus.OK;
@@ -92,6 +96,7 @@ public class UserController {
             summary = "Анбан пользователя"
     )
     @PostMapping("/unban/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus unbanUser(@PathVariable Long id) {
         if(userService.unbanById(id))
             return HttpStatus.OK;
@@ -102,6 +107,7 @@ public class UserController {
             summary = "Удаление пользователя"
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus deleteUser(@PathVariable Long id) {
         if(userService.deleteById(id))
             return HttpStatus.OK;

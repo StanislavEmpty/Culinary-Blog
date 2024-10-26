@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -53,6 +54,7 @@ public class IngredientController {
             summary = "Изменение ингредиента"
     )
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Ingredient> updateIngredient(@PathVariable Long id, @RequestBody IngredientUpdateDTO dto) {
         if(ingredientRepository.existsById(id)) {
             Ingredient currentIngredient = ingredientRepository.findById(id).orElseThrow(RuntimeException::new);
@@ -68,6 +70,7 @@ public class IngredientController {
             summary = "Удаление ингредиента"
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Ingredient> deleteIngredient(@PathVariable Long id) {
         ingredientRepository.deleteById(id);
         return ResponseEntity.ok().build();

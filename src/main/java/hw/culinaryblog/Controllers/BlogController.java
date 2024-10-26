@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -68,6 +69,7 @@ public class BlogController {
             summary = "Бан блога"
     )
     @PostMapping("/ban/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus banBlog(@PathVariable Long id) {
         if(blogService.banById(id))
             return HttpStatus.OK;
@@ -78,6 +80,7 @@ public class BlogController {
             summary = "Анбан блога"
     )
     @PostMapping("/unban/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus unbanBlog(@PathVariable Long id) {
         if(blogService.unbanById(id))
             return HttpStatus.OK;

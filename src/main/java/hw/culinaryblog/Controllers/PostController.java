@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,6 +34,7 @@ public class PostController {
             summary = "Получение всех постов"
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Iterable<PostShortResponse> getPosts() {
         return postService.findAll();
     }
@@ -152,6 +154,7 @@ public class PostController {
             summary = "Бан поста"
     )
     @PostMapping("/ban/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus banPost(@PathVariable Long id) {
         if (!postService.banById(id))
         {
@@ -164,6 +167,7 @@ public class PostController {
             summary = "Анбан поста"
     )
     @PostMapping("/unban/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpStatus unbanPost(@PathVariable Long id) {
         if (!postService.unbanById(id))
         {

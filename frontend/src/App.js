@@ -64,7 +64,7 @@ function App() {
             </Route>
             <Route element={
                 <Layout username={username} userRole={userRole} avatarUrl={avatarUrl} logoutHandler={logoutHandler}>
-                    <ProtectedRoute isAllowed={!!username}/>
+                    <ProtectedRoute isAllowed={username}/>
                 </Layout>}>
 
                 <Route path="" element={<HomePage/>}/>
@@ -81,9 +81,15 @@ function App() {
                 <Route path="/user/profile" element={<UserProfilePage />}/>
 
                 {/*For admins*/}
-                <Route path="/user/" element={<UserListPage username={username} />}/>
-                <Route path="/user/edit/:id" element={<UserEditPage username={username} />}/>
-                <Route path="/all-posts" element={<AllPostsPage />}/>
+                <Route path="/user/" element={<ProtectedRoute isAllowed={userRole === 'ROLE_ADMIN'}>
+                    <UserListPage username={username} />
+                </ProtectedRoute>}/>
+                <Route path="/user/edit/:id" element={<ProtectedRoute isAllowed={userRole === 'ROLE_ADMIN'}>
+                    <UserEditPage username={username} />
+                </ProtectedRoute>}/>
+                <Route path="/all-posts" element={<ProtectedRoute isAllowed={userRole === 'ROLE_ADMIN'}>
+                    <AllPostsPage />
+                </ProtectedRoute>}/>
                 {/*!For admins*/}
             </Route>
             <Route path="*" element={<NotExistPage/>}/>
